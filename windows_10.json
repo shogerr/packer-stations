@@ -20,17 +20,16 @@
         "{{user `autounattend`}}",
         "./scripts/disable-winrm.ps1",
         "./scripts/enable-winrm.ps1",
-        "./scripts/fixnetwork.ps1"
-      ],
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
+        "./scripts/fixnetwork.ps1",
+        "./scripts/unattend.xml"
+      ]
     }
   ],
   "provisioners": [
     {
       "type": "powershell",
       "inline": [
-        "& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
-        "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+        "& $env:SystemRoot\\System32\\Sysprep\\sysprep.exe /oobe /generalize /quiet /shutdown"
       ]
     }
   ],
